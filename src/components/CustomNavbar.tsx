@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import './index.css'
+
+
 interface CustomNavbarProps {
-  img?: string; // Logo image URL (optional)
-  atags?: string[]; // Array of navigation links (optional)
-  onClicksAtags?: () => void; // Optional callback for the anchor tags
-  styles?: string; // Additional custom styles (optional)
-  buttonStyles?: string[]; // Array of button styles (optional)
-  buttonNames?: string[]; // Array of button names (optional)
-  onClickBtn?: () => void; // Optional callback for button clicks
+  img?: string;
+  atags?: string[];
+  onClicksAtags?: () => void;
+  styles?: React.CSSProperties;
+  buttonStyles?: React.CSSProperties[];
+  buttonNames?: string[];
+  onClickBtn?: () => void;
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
@@ -19,27 +20,44 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   buttonNames,
   onClickBtn
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu toggle
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className={`w-full h-[10vh] flex items-center justify-between px-4 sm:px-6 md:px-10 ${styles}`}>
+    <div
+      style={{
+        width: '100%',
+        height: '10vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        ...styles,
+      }}
+    >
       {/* Logo Section */}
       <div>
         <img
-          className="w-12 h-12 object-contain"
+          style={{ width: '48px', height: '48px', objectFit: 'contain' }}
           src={img || 'default-image-url'}
           alt="Logo"
         />
       </div>
 
       {/* Desktop Nav Links */}
-      <div className="hidden md:flex">
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
         {atags?.map((item, index) => (
           <a
             onClick={onClicksAtags}
             href={`#${item.toLowerCase()}`}
             key={index}
-            className="text-white hover:text-gray-400 mx-4"
+            style={{
+              color: '#fff',
+              textDecoration: 'none',
+              margin: '0 16px',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#bbb')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#fff')}
           >
             {item}
           </a>
@@ -47,9 +65,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
       </div>
 
       {/* Mobile Menu Icon */}
-      <div className="md:hidden flex items-center">
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="32" height="32">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -57,24 +75,50 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
       {/* Slider Menu (Mobile) */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center md:hidden">
-          <div className="bg-white p-6 rounded-lg w-3/4 max-w-sm">
-            <div className="flex justify-between items-center mb-4">
-              <img className="w-12 h-12 object-contain" src={img || 'default-image-url'} alt="Logo" />
-              <button onClick={() => setIsMenuOpen(false)} className="text-black">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              width: '75%',
+              maxWidth: '300px',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <img style={{ width: '48px', height: '48px', objectFit: 'contain' }} src={img || 'default-image-url'} alt="Logo" />
+              <button onClick={() => setIsMenuOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="32" height="32">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <div className="flex flex-col items-center">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {atags?.map((item, index) => (
                 <a
                   onClick={onClicksAtags}
                   href={`#${item.toLowerCase()}`}
                   key={index}
-                  className="text-black hover:text-gray-600 mb-4"
+                  style={{
+                    color: '#000',
+                    textDecoration: 'none',
+                    marginBottom: '16px',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#666')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#000')}
                 >
                   {item}
                 </a>
@@ -85,7 +129,15 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 <button
                   onClick={onClickBtn}
                   key={index}
-                  className={`${buttonStyles?.[index] || buttonStyles?.[0]} bg-white px-[2vw] py-[0.3vw] rounded-full mb-4`}
+                  style={{
+                    backgroundColor: 'white',
+                    padding: '8px 16px',
+                    borderRadius: '999px',
+                    border: '1px solid black',
+                    marginBottom: '16px',
+                    cursor: 'pointer',
+                    ...(buttonStyles?.[index] || buttonStyles?.[0]),
+                  }}
                 >
                   {name}
                 </button>
@@ -94,21 +146,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
           </div>
         </div>
       )}
-
-      {/* Desktop Buttons */}
-      <div className="hidden md:flex gap-4">
-        {buttonNames?.map((name, index) => (
-          <button
-            onClick={onClickBtn}
-            key={index}
-            className={`${buttonStyles?.[index] || buttonStyles?.[0]} bg-white px-[2vw] py-[0.3vw] rounded-full`}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
 
-export {CustomNavbar};
+export { CustomNavbar };
