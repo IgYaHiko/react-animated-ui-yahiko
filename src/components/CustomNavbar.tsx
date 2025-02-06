@@ -111,4 +111,4 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   );
 };
 
-export default CustomNavbar;
+export {CustomNavbar};
